@@ -36,3 +36,14 @@ def test_was_published_recently_with_recent_question(self):
     time = timezone.now() - datetime.timedelta(hours=1)
     recent_question = Question(pub_date=time)
     self.assertEqual(recent_question.was_published_recently(), True)
+
+def get_queryset(self):
+    """
+    Return the last five published questions (not including those set to be
+    published in the future).
+    """
+    return Question.objects.filter(
+        pub_date__lte=timezone.now()
+    ).order_by('-pub_date')[:5]
+
+from django.core.urlresolvers import reverse
